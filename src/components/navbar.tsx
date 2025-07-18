@@ -4,8 +4,8 @@ import SvgLogo from './svgLogo'
 
 const Navbar: React.FC = () => {
   return (
-    <div className="w-full p-2">
-      <div className="max-w-xl flex items-center justify-center h-full py-3">
+    <div className="w-full px-8 py-4 bg-gray-800 text-white">
+      <div className="max-w-6xl flex items-center h-full py-3 mx-auto">
         <figure className="flex items-center">
           <SvgIso className="h-12 mr-2" />
           <SvgLogo className="h-8" />
