@@ -1,8 +1,8 @@
 export function WhySection() {
   return (
-    <section className="bg-black text-white px-6 py-12 md:py-28">
-      <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-center gap-12">
-        <div className="text-center md:text-left md:w-1/2">
+    <section className="bg-black text-white px-6 py-12 md:py-28 relative overflow-hidden">
+      <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-center gap-12 pb-64 md:pb-0">
+        <div className="text-center md:text-left md:w-1/2 z-10">
           <h2 className="text-yellow-400 text-3xl sm:text-4xl md:text-5xl font-extrabold mb-6">
             No somos solo un taller.
           </h2>
@@ -14,7 +14,7 @@ export function WhySection() {
           </p>
         </div>
 
-        <div className="md:w-1/2 hidden md:block">
+        <div className="sm:w-1/2 absolute md:relative opacity-50 md:opacity-100 bottom-16 md:bottom-0">
           <img
             src="/images/reason-why.png"
             alt="Nuestro equipo trabajando"
