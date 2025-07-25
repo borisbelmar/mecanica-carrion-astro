@@ -1,9 +1,9 @@
-import { Wrench, Sparkles, Settings2 } from "lucide-react"
+import { Wrench, Sparkles, Gauge } from "lucide-react"
 
 export function ServicesSection() {
   const services = [
     {
-      icon: <Settings2 className="w-10 h-10 text-yellow-400" />,
+      icon: <Gauge className="w-10 h-10 text-yellow-400" />,
       title: "Mantenimiento",
       description: "Deja tu moto al día con diagnósticos precisos y cuidado profesional.",
     },
@@ -23,7 +23,7 @@ export function ServicesSection() {
     <section
       className="relative bg-fixed bg-center bg-cover text-white py-32 px-6"
       style={{
-        backgroundImage: `url(/images/mantenciones.webp)`,
+        backgroundImage: `url(/images/services.webp)`,
       }}
     >
       <div className="absolute inset-0 bg-black/70 backdrop-brightness-50 z-0" />

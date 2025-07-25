@@ -11,12 +11,12 @@ export function WorkshopSection() {
             className="row-span-2 w-full h-full object-cover rounded-xl shadow-lg"
           />
           <img
-            src="/images/modificaciones.webp"
+            src="/images/taller-2.webp"
             alt="Detalle del taller"
             className="w-full h-full object-cover rounded-xl shadow-lg"
           />
           <img
-            src="/images/mantenciones.webp"
+            src="/images/taller-3.webp"
             alt="Moto en proceso"
             className="w-full h-full object-cover rounded-xl shadow-lg"
           />
