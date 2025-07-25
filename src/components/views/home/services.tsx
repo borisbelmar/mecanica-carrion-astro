@@ -2,7 +2,7 @@ import ServiceItem from "./serviceItem";
 
 export default function Services() {
   return (
-    <section className="py-18 bg-gray-900">
+    <section className="py-24 bg-gray-900">
       <div className="max-w-6xl mx-auto px-8">
         <h2 className="text-xl sm:text-3xl font-bold text-white text-center mb-8">
           Nuestros Servicios
@@ -11,17 +11,17 @@ export default function Services() {
           <ServiceItem
             title="Mantención"
             description="Revisiones periódicas para mantener tu moto en óptimas condiciones."
-            imageUrl="/images/bg-desktop-en-construccion.webp"
+            imageUrl="/images/mantenciones.webp"
           />
           <ServiceItem
             title="Modificaciones"
             description="Personaliza tu moto con modificaciones estéticas y de rendimiento."
-            imageUrl="/images/bg-desktop-en-construccion.webp"
+            imageUrl="/images/modificaciones.webp"
           />
           <ServiceItem
             title="Restauración"
             description="Deja tu moto como nueva con nuestro servicio de restauración."
-            imageUrl="/images/bg-desktop-en-construccion.webp"
+            imageUrl="/images/restauraciones.webp"
           />
         </div>
       </div>

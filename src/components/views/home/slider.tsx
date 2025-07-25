@@ -1,7 +1,7 @@
 export default function Slider() {
   return (
     <div
-      className="relative flex flex-col items-center justify-center flex-1 min-h-screen"
+      className="relative flex flex-col items-center justify-center flex-1 min-h-[calc(100vh-150px)]"
     >
       <div className="absolute inset-0 bg-black">
         <picture>
