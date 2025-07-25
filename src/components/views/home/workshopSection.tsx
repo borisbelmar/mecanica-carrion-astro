@@ -1,6 +1,5 @@
 import { Button } from "@/components/ui/button";
 
-// components/WorkshopSection.tsx
 export function WorkshopSection() {
   return (
     <section className="bg-yellow-500 px-6 py-24 text-black">
