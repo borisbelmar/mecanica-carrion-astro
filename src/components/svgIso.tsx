@@ -1,5 +1,3 @@
-import React from 'react'
-
 interface SvgIsoProps {
   className?: string
   width?: string | number

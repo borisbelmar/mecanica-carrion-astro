@@ -1,7 +1,13 @@
 ---
 import "../styles/global.css";
-import HomeReact from "../components/views/home";
-
+import WhatsappButton from "@/components/whatsappButton";
+import { Navbar } from "@/components/navbar";
+import { HeroSection } from "@/components/views/home/heroSection";
+import { WhySection } from "@/components/views/home/whySection";
+import { ServicesSection } from "@/components/views/home/servicesSection";
+import { ProcessSection } from "@/components/views/home/processSection";
+import { WorkshopSection } from "@/components/views/home/workshopSection";
+import { Footer } from "@/components/footer";
 ---
 
 <html lang="es">
@@ -13,6 +19,15 @@ import HomeReact from "../components/views/home";
 		<title>Mecánica Carrión - Taller de Motocicletas</title>
 	</head>
 	<body>
-		<HomeReact />
+		<section class="flex flex-col min-h-screen">
+			<WhatsappButton />
+      <Navbar client:load />
+      <HeroSection />
+      <WhySection />
+      <ServicesSection />
+      <ProcessSection />
+      <WorkshopSection />
+      <Footer />
+		</section>
 	</body>
 </html>

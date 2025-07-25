@@ -1,5 +1,3 @@
-import React from 'react'
-
 interface SvgLogoProps {
   className?: string
   width?: string | number
