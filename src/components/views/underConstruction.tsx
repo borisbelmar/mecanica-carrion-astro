@@ -1,8 +1,10 @@
 import { MapPin } from "lucide-react";
+
 import SvgIso from "../svgIso";
 import SvgLogo from "../svgLogo";
-import { cn } from "@/lib/utils";
 import WhatsappButton from "../whatsappButton";
+
+import { cn } from "@/lib/utils";
 
 export default function UnderConstruction() {
   return (

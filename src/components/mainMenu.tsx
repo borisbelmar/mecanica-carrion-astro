@@ -1,12 +1,13 @@
 "use client"
 
+import { Menu, X } from "lucide-react"
+
 import {
   Drawer,
   DrawerContent,
   DrawerTrigger,
   DrawerClose,
 } from "@/components/ui/drawer"
-import { Menu, X } from "lucide-react"
 
 export function MainMenu() {
   return (

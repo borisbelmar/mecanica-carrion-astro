@@ -1,9 +1,11 @@
 'use client'
 
+import { useEffect, useState } from "react"
+
 import SvgIso from "./svgIso"
 import SvgLogo from "./svgLogo"
 import { MainMenu } from "./mainMenu"
-import { useEffect, useState } from "react"
+
 import { cn } from "@/lib/utils"
 
 export function Navbar() {
