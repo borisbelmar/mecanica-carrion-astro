@@ -2,7 +2,6 @@
 
 import { motion, AnimatePresence } from "motion/react"
 import { useQuery } from "@tanstack/react-query"
-import { useState, useRef } from "react"
 
 import { TestimonialCard } from "./testimonialCard"
 import { Paginator } from "./paginator"
