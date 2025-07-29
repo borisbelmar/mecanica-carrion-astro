@@ -13,6 +13,10 @@ export function useTestimonialsSlider(testimonials: Testimonial[]) {
   const [index, setIndex] = useState(0)
   const [direction, setDirection] = useState<"left" | "right">("right")
   const [isMobile, setIsMobile] = useState(false)
+  const [isUserInteracting, setIsUserInteracting] = useState(false)
+  const [touchStart, setTouchStart] = useState<number | null>(null)
+  const [touchEnd, setTouchEnd] = useState<number | null>(null)
+  const touchThreshold = 50 // Minimum distance for a swipe
 
   useEffect(() => {
     const handleResize = () => {
@@ -25,12 +29,12 @@ export function useTestimonialsSlider(testimonials: Testimonial[]) {
 
   useEffect(() => {
     if (testimonials.length < 1) return
-    if (testimonials.length <= 3) {
+    const chunkSize = isMobile ? 1 : 3
+    if (testimonials.length <= chunkSize) {
       setPages([testimonials])
       setIndex(0)
       return 
     }
-    const chunkSize = isMobile ? 1 : 3
     setPages(chunk(testimonials, chunkSize))
     setIndex(0)
   }, [isMobile, testimonials])
@@ -42,15 +46,43 @@ export function useTestimonialsSlider(testimonials: Testimonial[]) {
         ? (prev + 1) % pages.length
         : (prev - 1 + pages.length) % pages.length
     )
+    // Reset user interaction after a delay
+    setIsUserInteracting(true)
+    setTimeout(() => setIsUserInteracting(false), 3000)
   }, [pages.length])
 
   useEffect(() => {
-    if (pages.length === 0) return
+    if (pages.length === 0 || isUserInteracting) return
     const interval = setInterval(() => {
       paginate("right")
     }, 15000)
     return () => clearInterval(interval)
-  }, [pages, index, paginate])
+  }, [pages, index, paginate, isUserInteracting])
+
+    const handleTouchStart = (e: React.TouchEvent) => {
+    setTouchEnd(null)
+    setTouchStart(e.targetTouches[0].clientX)
+  }
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX)
+  }
+
+  const handleTouchEnd = () => {
+    if (!touchStart || !touchEnd) return
+    
+    const distance = touchStart - touchEnd
+    const isLeftSwipe = distance > touchThreshold
+    const isRightSwipe = distance < -touchThreshold
+
+    if (isLeftSwipe && pages.length > 1) {
+      paginate("right")
+    }
+    if (isRightSwipe && pages.length > 1) {
+      paginate("left")
+    }
+  }
+
 
   return {
     pages,
@@ -58,5 +90,8 @@ export function useTestimonialsSlider(testimonials: Testimonial[]) {
     direction,
     isMobile,
     paginate,
+    handleTouchStart,
+    handleTouchMove,
+    handleTouchEnd
   }
 }
