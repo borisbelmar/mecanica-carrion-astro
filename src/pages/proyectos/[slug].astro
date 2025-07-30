@@ -1,0 +1,28 @@
+---
+import { fetchProjectBySlug, fetchProjects } from '../../lib/sanity'
+import MainLayout from '@/layouts/mainLayout.astro'
+import { ProjectDetail } from '@/components/views/projects/projectDetail'
+
+export async function getStaticPaths() {
+  const projects = await fetchProjects()
+  
+  return projects.map((project) => ({
+    params: { slug: project.slug.current },
+    props: { project },
+  }))
+}
+
+const { slug } = Astro.params
+const project = await fetchProjectBySlug(slug as string)
+
+if (!project) {
+  return new Response(null, {
+    status: 404,
+    statusText: 'Proyecto no encontrado'
+  })
+}
+---
+
+<MainLayout title={`${project.title} - Mecánica Carrión`}>
+  <ProjectDetail client:load project={project} />
+</MainLayout>

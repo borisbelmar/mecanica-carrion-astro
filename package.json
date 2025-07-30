@@ -1,7 +1,7 @@
 {
   "name": "mecanica-carrion-astro",
   "type": "module",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "scripts": {
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx,.astro",
     "dev": "astro dev",
@@ -11,6 +11,8 @@
   },
   "dependencies": {
     "@astrojs/react": "^4.3.0",
+    "@portabletext/react": "^3.2.1",
+    "@portabletext/types": "^2.0.13",
     "@radix-ui/react-dialog": "^1.1.14",
     "@radix-ui/react-slot": "^1.2.3",
     "@sanity/client": "^7.8.1",

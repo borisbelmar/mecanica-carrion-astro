@@ -1,0 +1,10 @@
+---
+import MainLayout from "@/layouts/mainLayout.astro"
+import { ProjectGallery } from "@/components/views/projects/projectGallery"
+import { fetchProjects } from "@/lib/sanity";
+
+const projects = await fetchProjects();
+---
+<MainLayout title="Mecánica Carrión - Proyectos">
+  <ProjectGallery projects={projects} client:load />
+</MainLayout>

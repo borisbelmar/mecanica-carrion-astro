@@ -1,35 +1,18 @@
 ---
 import "../styles/global.css";
-import WhatsappButton from "@/components/whatsappButton";
-import { Navbar } from "@/components/navbar";
 import { HeroSection } from "@/components/views/home/heroSection";
 import { WhySection } from "@/components/views/home/whySection";
 import { ServicesSection } from "@/components/views/home/servicesSection";
 import { ProcessSection } from "@/components/views/home/processSection";
 import { WorkshopSection } from "@/components/views/home/workshopSection";
 import { TestimonialsSection } from "@/components/views/home/testimonialsSection";
-import { Footer } from "@/components/footer";
+import MainLayout from "@/layouts/mainLayout.astro";
 ---
-
-<html lang="es">
-  <head>
-    <meta charset="utf-8" />
-    <link rel="icon" type="image/png" href="/favicon.png" />
-    <meta name="viewport" content="width=device-width" />
-    <meta name="generator" content={Astro.generator} />
-    <title>Mecánica Carrión - Taller de Motocicletas</title>
-  </head>
-  <body class="bg-black text-white">
-    <section class="flex flex-col min-h-screen">
-      <WhatsappButton />
-      <Navbar client:load />
-      <HeroSection />
-      <WhySection />
-      <ServicesSection />
-      <ProcessSection />
-      <WorkshopSection />
-      <TestimonialsSection client:load />
-      <Footer />
-    </section>
-  </body>
-</html>
+<MainLayout title="Mecánica Carrión - Inicio">
+  <HeroSection />
+  <WhySection />
+  <ServicesSection />
+  <ProcessSection />
+  <WorkshopSection />
+  <TestimonialsSection client:load />
+</MainLayout>
