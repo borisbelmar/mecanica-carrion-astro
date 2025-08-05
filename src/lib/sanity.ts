@@ -58,3 +58,34 @@ export async function fetchProjectBySlug(slug: string): Promise<Project | null> 
     gallery: project.gallery ? project.gallery.map((img: any) => imageUrlBuilder(client).image(img).url()) : [],
   }
 }
+
+export type Brand = {
+  _id: string
+  name: string
+  image: string
+  link: string
+}
+
+export async function fetchBrands(): Promise<Brand[]> {
+  const brands = await client.fetch('*[_type == "brand"]{_id, name, image, link}')
+  return brands.map((brand: any) => ({
+    ...brand,
+    image: brand.image ? imageUrlBuilder(client).image(brand.image).url() : undefined,
+  }))
+}
+
+export type HistoryBlock = {
+  decade: string
+  title: string
+  subtitle: string
+  description: string
+  image: string
+}
+
+export async function fetchHistory(): Promise<HistoryBlock[]> {
+  const history = await client.fetch('*[_type == "historyBlock"]{decade, order, title, subtitle, description, image} | order(order asc)')
+  history.forEach((block: any) => {
+    block.image = block.image ? imageUrlBuilder(client).image(block.image).url() : undefined
+  })
+  return history
+}

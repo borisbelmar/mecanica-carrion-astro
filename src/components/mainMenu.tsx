@@ -35,8 +35,7 @@ export function MainMenu() {
           <a href="/" className="hover:text-yellow-400 transition">Inicio</a>
           <a href="#servicios" className="hover:text-yellow-400 transition">Servicios</a>
           <a href="/proyectos" className="hover:text-yellow-400 transition">Proyectos</a>
-          <a href="#quienes-somos" className="hover:text-yellow-400 transition">Quiénes somos</a>
-          <a href="#contacto" className="hover:text-yellow-400 transition">Contacto</a>
+          <a href="/quienes-somos" className="hover:text-yellow-400 transition">Quiénes somos</a>
         </nav>
       </DrawerContent>
     </Drawer>

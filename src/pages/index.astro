@@ -7,6 +7,8 @@ import { ProcessSection } from "@/components/views/home/processSection";
 import { WorkshopSection } from "@/components/views/home/workshopSection";
 import { TestimonialsSection } from "@/components/views/home/testimonialsSection";
 import MainLayout from "@/layouts/mainLayout.astro";
+import { BrandsCarousel } from "@/components/views/home/brandsCarousel";
+import { ContactSection } from "@/components/views/home/contactSection";
 ---
 <MainLayout title="Mecánica Carrión - Inicio">
   <HeroSection />
@@ -15,4 +17,6 @@ import MainLayout from "@/layouts/mainLayout.astro";
   <ProcessSection />
   <WorkshopSection />
   <TestimonialsSection client:load />
+  <BrandsCarousel client:load />
+  <ContactSection />
 </MainLayout>
