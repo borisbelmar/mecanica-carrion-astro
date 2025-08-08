@@ -1,0 +1,25 @@
+---
+import MainLayout from "@/layouts/mainLayout.astro";
+const title = 'Página no encontrada | Mecánica Carrión';
+---
+<MainLayout {title}>
+  <section class="relative flex flex-1 items-center justify-center px-6 py-28">
+    <div class="relative max-w-2xl w-full text-center space-y-10">
+      <div class="space-y-4">
+        <h1 class="text-4xl md:text-6xl font-extrabold tracking-tight leading-tight text-yellow-400">
+          404
+        </h1>
+        <h2 class="text-3xl md:text-5xl font-extrabold tracking-tight leading-tight">
+          Página no encontrada
+        </h2>
+        <p class="text-base md:text-lg text-neutral-300 leading-relaxed max-w-xl mx-auto">
+          La ruta solicitada no existe o cambió de lugar. Verifica la dirección o vuelve al inicio para seguir explorando nuestros servicios.
+        </p>
+        <img src="/images/404.png" alt="Página no encontrada" class="mx-auto w-56 md:w-64 drop-shadow-lg select-none" draggable="false" />
+      </div>
+      <a href="/" class="group px-8 py-4 rounded-xl bg-yellow-400 text-black font-bold inline-flex items-center justify-center gap-2 hover:bg-yellow-300 transition mt-8">
+        <span>Volver al inicio</span>
+      </a>
+    </div>
+  </section>
+</MainLayout>

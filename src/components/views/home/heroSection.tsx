@@ -23,9 +23,11 @@ export function HeroSection() {
         <p className="mt-4 text-lg sm:text-2xl text-white/80 italic">
           Desde hace tres generaciones.
         </p>
-        <Button size="lg" className="mt-8 bg-yellow-400 text-black font-semibold hover:bg-yellow-500 transition">
-          Ver más
-        </Button>
+        <a href="/proyectos">
+          <Button size="lg" className="mt-8 bg-yellow-400 text-black font-semibold hover:bg-yellow-500 transition">
+            Ver nuestros proyectos
+          </Button>
+        </a>
       </div>
     </section>
   )

@@ -34,7 +34,7 @@ export function TestimonialsSection() {
           Lo que dicen nuestros clientes
         </h2>
         <div 
-          className={`relative h-[240px] overflow-hidden ${isMobile ? 'touch-pan-x' : ''}`}
+          className={`relative h-[280px] overflow-hidden ${isMobile ? 'touch-pan-x' : ''}`}
           onTouchStart={isMobile ? handleTouchStart : undefined}
           onTouchMove={isMobile ? handleTouchMove : undefined}
           onTouchEnd={isMobile ? handleTouchEnd : undefined}

@@ -127,12 +127,12 @@ export function BrandsCarousel() {
                   href={brand.link}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-24 h-24 md:w-35 md:h-35 rounded-lg overflow-hidden grayscale hover:grayscale-0 transition flex-shrink-0"
+                  className="w-24 h-24 md:w-35 md:h-35 rounded-lg overflow-hidden transition flex-shrink-0"
                 >
                   <img
                     src={brand.image}
                     alt={brand.name}
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-contain bg-white p-2 hover:scale-105 transition-transform duration-300"
                     draggable={false}
                   />
                 </SliderSafeLink>

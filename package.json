@@ -1,7 +1,7 @@
 {
   "name": "mecanica-carrion-astro",
   "type": "module",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "scripts": {
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx,.astro",
     "dev": "astro dev",

@@ -34,9 +34,11 @@ export function WorkshopSection() {
             Es un espacio que respira mecánica, donde el pasado y el futuro se cruzan.  
             Ven a conocerlo, y a vivir la experiencia Carrión.
           </p>
-          <Button size="lg" variant="outline" className="mt-8">
-            Conocer más
-          </Button>
+          <a href="/quienes-somos">
+            <Button size="lg" variant="outline" className="mt-8">
+              Conocer más
+            </Button>
+          </a>
         </div>
       </div>
     </section>

@@ -21,7 +21,7 @@ export function AboutPage({
           <img
             src="/images/bg-quienes-somos-min.jpg"
             alt="Historia de Mecánica Carrión"
-            className="w-full h-full object-cover"
+            className="w-full h-full object-cover object-left-top"
           />
           <div className="absolute inset-0 bg-black/70" />
         </div>
