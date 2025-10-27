@@ -82,10 +82,114 @@ export type HistoryBlock = {
   image: string
 }
 
+export type AboutPageData = {
+  heroBadge: string
+  heroTitle: string
+  heroSubtitle: string
+  heroImage: string
+  sectionTitle: string
+  sectionDescription: string
+  historyBlocks: {
+    decade: string
+    title: string
+    subtitle: string
+    description: string
+    image?: string
+    images?: string[]
+  }[]
+  galleryTitle: string
+  galleryDescription: string
+  galleryImages: string[]
+  ctaTitle: string
+  ctaDescription: string
+  primaryButtonText: string
+  secondaryButtonText: string
+}
+
 export async function fetchHistory(): Promise<HistoryBlock[]> {
   const history = await client.fetch('*[_type == "historyBlock"]{decade, order, title, subtitle, description, image} | order(order asc)')
   history.forEach((block: any) => {
     block.image = block.image ? imageUrlBuilder(client).image(block.image).url() : undefined
   })
   return history
+}
+
+export async function fetchAboutPage(): Promise<AboutPageData> {
+  const aboutPage = await client.fetch(`*[_type == "aboutPage"][0]{
+    heroBadge,
+    heroTitle,
+    heroSubtitle,
+    heroImage,
+    sectionTitle,
+    sectionDescription,
+    historyBlock1,
+    historyBlock2,
+    historyBlock3,
+    historyBlock4,
+    galleryTitle,
+    galleryDescription,
+    galleyImages,
+    ctaTitle,
+    ctaDescription,
+    primaryButtonText,
+    secondaryButtonText
+  }`)
+
+  if (!aboutPage) {
+    throw new Error('About page data not found in Sanity')
+  }
+
+  // Transform image URLs
+  const heroImage = aboutPage.heroImage ? imageUrlBuilder(client).image(aboutPage.heroImage).url() : ''
+  
+  // Process history blocks
+  const historyBlocks = []
+  
+  if (aboutPage.historyBlock1) {
+    historyBlocks.push({
+      ...aboutPage.historyBlock1,
+      image: aboutPage.historyBlock1.image ? imageUrlBuilder(client).image(aboutPage.historyBlock1.image).url() : undefined
+    })
+  }
+  
+  if (aboutPage.historyBlock2) {
+    historyBlocks.push({
+      ...aboutPage.historyBlock2,
+      image: aboutPage.historyBlock2.image ? imageUrlBuilder(client).image(aboutPage.historyBlock2.image).url() : undefined
+    })
+  }
+  
+  if (aboutPage.historyBlock3) {
+    historyBlocks.push({
+      ...aboutPage.historyBlock3,
+      image: aboutPage.historyBlock3.image ? imageUrlBuilder(client).image(aboutPage.historyBlock3.image).url() : undefined
+    })
+  }
+  
+  if (aboutPage.historyBlock4) {
+    historyBlocks.push({
+      ...aboutPage.historyBlock4,
+      images: aboutPage.historyBlock4.images ? aboutPage.historyBlock4.images.map((img: any) => imageUrlBuilder(client).image(img).url()) : undefined
+    })
+  }
+
+  // Process gallery images
+  const galleryImages = aboutPage.galleyImages ? aboutPage.galleyImages.map((img: any) => imageUrlBuilder(client).image(img).url()) : []
+
+  return {
+    heroBadge: aboutPage.heroBadge,
+    heroTitle: aboutPage.heroTitle,
+    heroSubtitle: aboutPage.heroSubtitle,
+    heroImage,
+    sectionTitle: aboutPage.sectionTitle,
+    sectionDescription: aboutPage.sectionDescription,
+    historyBlocks,
+    galleryTitle: aboutPage.galleryTitle,
+    galleryDescription: aboutPage.galleryDescription,
+    galleryImages,
+    ctaTitle: aboutPage.ctaTitle,
+    ctaDescription: aboutPage.ctaDescription,
+    primaryButtonText: aboutPage.primaryButtonText,
+    secondaryButtonText: aboutPage.secondaryButtonText
+  }
 }

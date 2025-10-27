@@ -1,18 +1,10 @@
 ---
-import fs from "fs";
-import path from "path";
 import { AboutPage } from "@/components/views/about"
 import MainLayout from "@/layouts/mainLayout.astro"
-import { fetchHistory } from "@/lib/sanity"
+import { fetchAboutPage } from "@/lib/sanity"
 
-const aboutGalleryPath = path.join(process.cwd(), "public", "images", "about-gallery");
-const aboutGalleryImages = fs.readdirSync(aboutGalleryPath).map(file => ({
-  src: `/images/about-gallery/${file}`,
-  alt: `Imagen de la galería sobre nosotros - ${file}`
-}));
-
-const historyBlocks = await fetchHistory();
+const aboutPageData = await fetchAboutPage();
 ---
 <MainLayout title="Mecánica Carrión - Quiénes Somos">
-  <AboutPage historyBlocks={historyBlocks} galleryImages={aboutGalleryImages} />
+  <AboutPage aboutPageData={aboutPageData} />
 </MainLayout>
