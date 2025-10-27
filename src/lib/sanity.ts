@@ -9,6 +9,36 @@ export const client = createClient({
   apiVersion: '2025-02-06',
 })
 
+// Safe image URL builder that handles broken/missing images
+function safeImageUrl(imageRef: any): string | undefined {
+  if (!imageRef) return undefined
+  
+  try {
+    // Check if the image reference has the required properties
+    if (!imageRef._type || imageRef._type !== 'image') {
+      console.warn('Invalid image reference:', imageRef)
+      return undefined
+    }
+    
+    // Check if asset reference exists
+    if (!imageRef.asset || !imageRef.asset._ref) {
+      console.warn('Missing asset reference:', imageRef)
+      return undefined
+    }
+    
+    // Additional check for _upload objects (broken uploads)
+    if (imageRef._upload) {
+      console.warn('Broken upload reference found:', imageRef)
+      return undefined
+    }
+    
+    return imageUrlBuilder(client).image(imageRef).url()
+  } catch (error) {
+    console.warn('Failed to generate image URL:', error, imageRef)
+    return undefined
+  }
+}
+
 export type Testimonial = {
   _id: string
   name: string
@@ -22,7 +52,7 @@ export async function fetchTestimonials(): Promise<Testimonial[]> {
   const testimonials = await client.fetch('*[_type == "testimonial"]')
   return testimonials.map((testimonial: any) => ({
     ...testimonial,
-    avatar: testimonial.avatar ? imageUrlBuilder(client).image(testimonial.avatar).url() : undefined,
+    avatar: safeImageUrl(testimonial.avatar),
   }))
 }
 
@@ -44,8 +74,8 @@ export async function fetchProjects(): Promise<Project[]> {
   const projects = await client.fetch('*[_type == "project"]{_id, title, slug, type, year, publishedAt, image}')
   return projects.map((project: any) => ({
     ...project,
-    image: project.image ? imageUrlBuilder(client).image(project.image).url() : undefined,
-    gallery: project.gallery ? project.gallery.map((img: any) => imageUrlBuilder(client).image(img).url()) : [],
+    image: safeImageUrl(project.image),
+    gallery: project.gallery ? project.gallery.map((img: any) => safeImageUrl(img)).filter(Boolean) : [],
   }))
 }
 
@@ -54,8 +84,8 @@ export async function fetchProjectBySlug(slug: string): Promise<Project | null> 
   if (!project) return null
   return {
     ...project,
-    image: project.image ? imageUrlBuilder(client).image(project.image).url() : undefined,
-    gallery: project.gallery ? project.gallery.map((img: any) => imageUrlBuilder(client).image(img).url()) : [],
+    image: safeImageUrl(project.image),
+    gallery: project.gallery ? project.gallery.map((img: any) => safeImageUrl(img)).filter(Boolean) : [],
   }
 }
 
@@ -70,7 +100,7 @@ export async function fetchBrands(): Promise<Brand[]> {
   const brands = await client.fetch('*[_type == "brand"]{_id, name, image, link}')
   return brands.map((brand: any) => ({
     ...brand,
-    image: brand.image ? imageUrlBuilder(client).image(brand.image).url() : undefined,
+    image: safeImageUrl(brand.image),
   }))
 }
 
@@ -109,7 +139,7 @@ export type AboutPageData = {
 export async function fetchHistory(): Promise<HistoryBlock[]> {
   const history = await client.fetch('*[_type == "historyBlock"]{decade, order, title, subtitle, description, image} | order(order asc)')
   history.forEach((block: any) => {
-    block.image = block.image ? imageUrlBuilder(client).image(block.image).url() : undefined
+    block.image = safeImageUrl(block.image)
   })
   return history
 }
@@ -140,7 +170,7 @@ export async function fetchAboutPage(): Promise<AboutPageData> {
   }
 
   // Transform image URLs
-  const heroImage = aboutPage.heroImage ? imageUrlBuilder(client).image(aboutPage.heroImage).url() : ''
+  const heroImage = safeImageUrl(aboutPage.heroImage) || ''
   
   // Process history blocks
   const historyBlocks = []
@@ -148,33 +178,33 @@ export async function fetchAboutPage(): Promise<AboutPageData> {
   if (aboutPage.historyBlock1) {
     historyBlocks.push({
       ...aboutPage.historyBlock1,
-      image: aboutPage.historyBlock1.image ? imageUrlBuilder(client).image(aboutPage.historyBlock1.image).url() : undefined
+      image: safeImageUrl(aboutPage.historyBlock1.image)
     })
   }
   
   if (aboutPage.historyBlock2) {
     historyBlocks.push({
       ...aboutPage.historyBlock2,
-      image: aboutPage.historyBlock2.image ? imageUrlBuilder(client).image(aboutPage.historyBlock2.image).url() : undefined
+      image: safeImageUrl(aboutPage.historyBlock2.image)
     })
   }
   
   if (aboutPage.historyBlock3) {
     historyBlocks.push({
       ...aboutPage.historyBlock3,
-      image: aboutPage.historyBlock3.image ? imageUrlBuilder(client).image(aboutPage.historyBlock3.image).url() : undefined
+      image: safeImageUrl(aboutPage.historyBlock3.image)
     })
   }
   
   if (aboutPage.historyBlock4) {
     historyBlocks.push({
       ...aboutPage.historyBlock4,
-      images: aboutPage.historyBlock4.images ? aboutPage.historyBlock4.images.map((img: any) => imageUrlBuilder(client).image(img).url()) : undefined
+      images: aboutPage.historyBlock4.images ? aboutPage.historyBlock4.images.map((img: any) => safeImageUrl(img)).filter(Boolean) : undefined
     })
   }
 
   // Process gallery images
-  const galleryImages = aboutPage.galleyImages ? aboutPage.galleyImages.map((img: any) => imageUrlBuilder(client).image(img).url()) : []
+  const galleryImages = aboutPage.galleyImages ? aboutPage.galleyImages.map((img: any) => safeImageUrl(img)).filter(Boolean) : []
 
   return {
     heroBadge: aboutPage.heroBadge,

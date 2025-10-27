@@ -91,15 +91,26 @@ export function ProjectDetail({ project }: ProjectDetailProps) {
     setSelectedImageIndex((prev) => (prev - 1 + allImages.length) % allImages.length)
   }
 
+  // Imagen por defecto para casos donde no hay imagen
+  const defaultImage = '/images/placeholder-project.svg'
+  const heroImage = project.image || defaultImage
+
   return (
     <div className="bg-black text-white min-h-screen">
       {/* Hero Section */}
       <section className="relative h-[70vh] overflow-hidden">
         <div className="absolute inset-0 pointer-events-none">
           <img
-            src={project.image}
+            src={heroImage}
             alt={project.title}
             className="w-full h-full object-cover"
+            onError={(e) => {
+              // Si falla cargar la imagen, usar una imagen por defecto
+              const target = e.target as HTMLImageElement
+              if (target.src !== defaultImage) {
+                target.src = defaultImage
+              }
+            }}
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent" />
         </div>
@@ -208,6 +219,14 @@ export function ProjectDetail({ project }: ProjectDetailProps) {
                       src={image}
                       alt={`${project.title} - Imagen ${index + 1}`}
                       className="w-full h-auto object-cover transition-transform duration-500 group-hover:scale-105"
+                      onError={(e) => {
+                        // Ocultar imagen si falla cargar
+                        const target = e.target as HTMLImageElement
+                        const container = target.closest('.break-inside-avoid') as HTMLElement
+                        if (container) {
+                          container.style.display = 'none'
+                        }
+                      }}
                     />
                   </motion.div>
                 ))}
@@ -263,6 +282,15 @@ export function ProjectDetail({ project }: ProjectDetailProps) {
               alt={`${project.title} - Imagen ${selectedImageIndex + 1}`}
               className="max-w-[90vw] max-h-[90vh] object-contain"
               onClick={(e) => e.stopPropagation()}
+              onError={(e) => {
+                // Si falla cargar, cerrar modal
+                const target = e.target as HTMLImageElement
+                if (target.src !== defaultImage) {
+                  target.src = defaultImage
+                } else {
+                  setIsGalleryOpen(false)
+                }
+              }}
             />
 
             <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 flex gap-2">

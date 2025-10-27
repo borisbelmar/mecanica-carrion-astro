@@ -11,6 +11,9 @@ type FilterType = "all" | "mantencion" | "restauracion" | "modificacion"
 
 export function ProjectGallery({ projects }: ProjectGalleryProps) {
   const [activeFilter, setActiveFilter] = useState<FilterType>("all")
+  
+  // Imagen por defecto
+  const defaultImage = '/images/placeholder-project.svg'
 
   const filteredProjects = projects.filter(project => {
     if (activeFilter === "all") return true
@@ -90,9 +93,16 @@ export function ProjectGallery({ projects }: ProjectGalleryProps) {
                   <a href={`/proyectos/${project.slug.current}`} className="block">
                     <div className="relative overflow-hidden">
                       <img
-                        src={project.image}
+                        src={project.image || defaultImage}
                         alt={project.model}
                         className="w-full h-auto object-cover transition-transform duration-500 group-hover:scale-110"
+                        onError={(e) => {
+                          // Si falla cargar la imagen, usar imagen por defecto
+                          const target = e.target as HTMLImageElement
+                          if (target.src !== defaultImage) {
+                            target.src = defaultImage
+                          }
+                        }}
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                     </div>
