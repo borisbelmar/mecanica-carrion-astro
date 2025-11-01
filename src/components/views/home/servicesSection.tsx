@@ -1,23 +1,24 @@
 import { Wrench, Sparkles, Gauge } from "lucide-react"
 
+const services = [
+  {
+    icon: <Gauge className="w-10 h-10 text-yellow-400" />,
+    title: "Mantenimiento",
+    description: "Deja tu moto al día con diagnósticos precisos y cuidado profesional.",
+  },
+  {
+    icon: <Sparkles className="w-10 h-10 text-yellow-400" />,
+    title: "Restauración",
+    description: "Rescatamos la esencia original y devolvemos la gloria a tu moto.",
+  },
+  {
+    icon: <Wrench className="w-10 h-10 text-yellow-400" />,
+    title: "Modificaciones",
+    description: "Creamos motos únicas que reflejan tu personalidad y estilo.",
+  },
+]
+
 export function ServicesSection() {
-  const services = [
-    {
-      icon: <Gauge className="w-10 h-10 text-yellow-400" />,
-      title: "Mantenimiento",
-      description: "Deja tu moto al día con diagnósticos precisos y cuidado profesional.",
-    },
-    {
-      icon: <Sparkles className="w-10 h-10 text-yellow-400" />,
-      title: "Restauración",
-      description: "Rescatamos la esencia original y devolvemos la gloria a tu moto.",
-    },
-    {
-      icon: <Wrench className="w-10 h-10 text-yellow-400" />,
-      title: "Modificaciones",
-      description: "Creamos motos únicas que reflejan tu personalidad y estilo.",
-    },
-  ]
 
   return (
     <section

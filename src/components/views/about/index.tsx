@@ -1,5 +1,6 @@
 import type { AboutPageData } from "@/lib/sanity";
 import { ChronoItem } from "./chronoItem"
+import Gallery from "@/components/gallery";
 
 interface AboutPageProps {
   aboutPageData: AboutPageData
@@ -65,34 +66,11 @@ export function AboutPage({
         </div>
       </section>
 
-      {/* Galería ordenada */}
-      <section className="py-20 bg-neutral-900">
-        <div className="max-w-6xl mx-auto px-6 md:px-12">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-yellow-500 mb-4">
-              {aboutPageData.galleryTitle}
-            </h2>
-            <p className="text-lg text-neutral-200 max-w-2xl mx-auto">
-              {aboutPageData.galleryDescription}
-            </p>
-          </div>
-
-          <div className="columns-1 md:columns-2 lg:columns-3 xl:columns-4 gap-6 space-y-6">
-            {aboutPageData.galleryImages.map((img, i) => (
-              <div
-                key={i}
-                className="relative group overflow-hidden rounded-xl bg-neutral-800 shadow-lg hover:shadow-xl transition-all duration-300 break-inside-avoid mb-6"
-              >
-                <img
-                  src={img}
-                  alt={`Imagen ${i + 1} de la galería del taller`}
-                  className="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-300"
-                />
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      <Gallery
+        title={aboutPageData.galleryTitle}
+        description={aboutPageData.galleryDescription}
+        images={aboutPageData.galleryImages}
+      />
 
       <section className="py-20 bg-neutral-800">
         <div className="max-w-4xl mx-auto px-6 md:px-12 text-center">

@@ -1,0 +1,10 @@
+---
+import MainLayout from "../layouts/mainLayout.astro"
+import ServicesView from "../components/views/services"
+import { ContactSection } from "@/components/contactSection";
+---
+
+<MainLayout title="Servicios - Mecánica Carrión">
+  <ServicesView client:load />
+  <ContactSection />
+</MainLayout>

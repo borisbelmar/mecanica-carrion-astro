@@ -33,7 +33,7 @@ export function MainMenu() {
 
         <nav className="flex flex-col gap-4 mt-4 text-lg font-medium">
           <a href="/" className="hover:text-yellow-400 transition">Inicio</a>
-          <a href="#servicios" className="hover:text-yellow-400 transition">Servicios</a>
+          <a href="/servicios" className="hover:text-yellow-400 transition">Servicios</a>
           <a href="/proyectos" className="hover:text-yellow-400 transition">Proyectos</a>
           <a href="/quienes-somos" className="hover:text-yellow-400 transition">Quiénes somos</a>
         </nav>
