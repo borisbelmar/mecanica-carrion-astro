@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "motion/react"
 import { Wrench, Sparkles, Gauge, Grid3X3 } from "lucide-react"
 import type { Project } from "@/lib/sanity"
@@ -7,24 +7,59 @@ interface ProjectGalleryProps {
   projects: Project[]
 }
 
-type FilterType = "all" | "mantencion" | "restauracion" | "modificacion"
+type FilterType = "all" | "mantenimiento" | "restauracion" | "modificaciones"
 
 export function ProjectGallery({ projects }: ProjectGalleryProps) {
   const [activeFilter, setActiveFilter] = useState<FilterType>("all")
+  
+  // Función para obtener el filtro inicial de la URL
+  const getInitialFilter = (): FilterType => {
+    if (typeof window === 'undefined') return "all"
+    
+    const urlParams = new URLSearchParams(window.location.search)
+    const categoria = urlParams.get('categoria')
+    
+    if (categoria) {
+      // Mapear las categorías de la URL a los tipos de filtro
+      const categoryMap: Record<string, FilterType> = {
+        'mantenimiento': 'mantenimiento',
+        'restauracion': 'restauracion', 
+        'modificaciones': 'modificaciones'
+      }
+      return categoryMap[categoria.toLowerCase()] || "all"
+    }
+    
+    return "all"
+  }
+
+  // Establecer filtro inicial basado en URL
+  useEffect(() => {
+    const initialFilter = getInitialFilter()
+    setActiveFilter(initialFilter)
+  }, [])
   
   // Imagen por defecto
   const defaultImage = '/images/placeholder-project.svg'
 
   const filteredProjects = projects.filter(project => {
     if (activeFilter === "all") return true
-    return project.type?.toLowerCase() === activeFilter
+    
+    // Mapear los tipos de filtro a los tipos de proyecto en Sanity
+    const typeMap: Record<FilterType, string> = {
+      'all': '',
+      'mantenimiento': 'mantencion',
+      'restauracion': 'restauracion',
+      'modificaciones': 'modificacion'
+    }
+    
+    return project.type?.toLowerCase() === typeMap[activeFilter]
   })
 
   const filterButtons = [
     { key: "all" as FilterType, label: "Todos", icon: <Grid3X3 className="w-4 h-4" /> },
-    { key: "mantencion" as FilterType, label: "Mantención", icon: <Gauge className="w-4 h-4" /> },
+    { key: "mantenimiento" as FilterType, label: "Mantenimiento", icon: <Gauge className="w-4 h-4" /> },
     { key: "restauracion" as FilterType, label: "Restauración", icon: <Sparkles className="w-4 h-4" /> },
-    { key: "modificacion" as FilterType, label: "Modificación", icon: <Wrench className="w-4 h-4" /> }
+    { key: "modificaciones" as FilterType, label: "Modificaciones", icon: <Wrench className="w-4 h-4" /> }
   ]
 
   const getProjectTypeIcon = (type: string | undefined) => {
@@ -37,6 +72,24 @@ export function ProjectGallery({ projects }: ProjectGalleryProps) {
         return <Wrench className="w-3 h-3" />
       default:
         return null
+    }
+  }
+
+  // Función para actualizar la URL cuando cambia el filtro
+  const handleFilterChange = (newFilter: FilterType) => {
+    setActiveFilter(newFilter)
+    
+    if (typeof window !== 'undefined') {
+      const url = new URL(window.location.href)
+      
+      if (newFilter === "all") {
+        url.searchParams.delete('categoria')
+      } else {
+        url.searchParams.set('categoria', newFilter)
+      }
+      
+      // Actualizar URL sin recargar la página
+      window.history.pushState({}, '', url.toString())
     }
   }
   return (
@@ -54,7 +107,7 @@ export function ProjectGallery({ projects }: ProjectGalleryProps) {
           {filterButtons.map((button) => (
             <button
               key={button.key}
-              onClick={() => setActiveFilter(button.key)}
+              onClick={() => handleFilterChange(button.key)}
               className={`
                 relative px-4 sm:px-6 py-2.5 sm:py-3 rounded-lg font-medium transition-all duration-300 text-sm sm:text-base flex items-center
                 ${activeFilter === button.key 
