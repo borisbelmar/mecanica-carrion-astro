@@ -20,10 +20,32 @@ function safeImageUrl(imageRef: any): string | undefined {
       return undefined
     }
     
-    // Check if asset reference exists
-    if (!imageRef.asset || !imageRef.asset._ref) {
+    // Check if asset reference exists - handle both _ref and expanded asset object
+    if (!imageRef.asset) {
       console.warn('Missing asset reference:', imageRef)
       return undefined
+    }
+    
+    // If we have an expanded asset with URL, use it directly
+    if (imageRef.asset.url) {
+      return imageRef.asset.url
+    }
+    
+    // If we have a reference (_ref), use the image builder
+    if (imageRef.asset._ref) {
+      return imageUrlBuilder(client).image(imageRef).url()
+    }
+    
+    // If we have an _id, construct reference object for image builder
+    if (imageRef.asset._id) {
+      const refObj = {
+        ...imageRef,
+        asset: {
+          _ref: imageRef.asset._id,
+          _type: 'reference'
+        }
+      }
+      return imageUrlBuilder(client).image(refObj).url()
     }
     
     // Additional check for _upload objects (broken uploads)
@@ -32,7 +54,9 @@ function safeImageUrl(imageRef: any): string | undefined {
       return undefined
     }
     
-    return imageUrlBuilder(client).image(imageRef).url()
+    console.warn('Missing asset reference or URL:', imageRef)
+    return undefined
+    
   } catch (error) {
     console.warn('Failed to generate image URL:', error, imageRef)
     return undefined
@@ -136,6 +160,38 @@ export type AboutPageData = {
   secondaryButtonText: string
 }
 
+export type Service = {
+  icon: string
+  title: string
+  description: string
+  bgImage: string
+  slug: string
+}
+
+export type WorkshopGallery = {
+  title: string
+  description: string
+  images: string[]
+}
+
+export type ProcessStep = {
+  step: string
+  title: string
+  description: string
+}
+
+export type ServicesPageData = {
+  heroTitle: string
+  heroSubtitle: string
+  services: Service[]
+  workshopGallery: WorkshopGallery
+  processSteps: ProcessStep[]
+  seo?: {
+    metaTitle?: string
+    metaDescription?: string
+  }
+}
+
 export async function fetchHistory(): Promise<HistoryBlock[]> {
   const history = await client.fetch('*[_type == "historyBlock"]{decade, order, title, subtitle, description, image} | order(order asc)')
   history.forEach((block: any) => {
@@ -221,5 +277,81 @@ export async function fetchAboutPage(): Promise<AboutPageData> {
     ctaDescription: aboutPage.ctaDescription,
     primaryButtonText: aboutPage.primaryButtonText,
     secondaryButtonText: aboutPage.secondaryButtonText
+  }
+}
+
+export async function fetchServicesPage(): Promise<ServicesPageData> {
+  const servicesPage = await client.fetch(`*[_type == "servicesPage"][0]{
+    heroTitle,
+    heroSubtitle,
+    services[]{
+      icon,
+      title,
+      description,
+      bgImage{
+        _type,
+        asset->{
+          _id,
+          url
+        },
+        hotspot,
+        crop,
+        alt
+      },
+      slug
+    },
+    workshopGallery{
+      title,
+      description,
+      images[]{
+        _type,
+        asset->{
+          _id,
+          url
+        },
+        hotspot,
+        crop,
+        alt
+      }
+    },
+    processSteps[]{
+      step,
+      title,
+      description
+    },
+    seo{
+      metaTitle,
+      metaDescription
+    }
+  }`)
+
+  if (!servicesPage) {
+    throw new Error('Services page data not found in Sanity')
+  }
+  
+  // Transform services with safe image URLs
+  const services = servicesPage.services ? servicesPage.services.map((service: any) => ({
+    ...service,
+    bgImage: safeImageUrl(service.bgImage) || ''
+  })) : []
+
+  // Transform workshop gallery images
+  const workshopGallery = servicesPage.workshopGallery ? {
+    ...servicesPage.workshopGallery,
+    images: servicesPage.workshopGallery.images ? 
+      servicesPage.workshopGallery.images.map((img: any) => safeImageUrl(img)).filter(Boolean) : []
+  } : {
+    title: '',
+    description: '',
+    images: []
+  }
+
+  return {
+    heroTitle: servicesPage.heroTitle || 'Servicios',
+    heroSubtitle: servicesPage.heroSubtitle || 'Más de 20 años perfeccionando el arte de la mecánica',
+    services,
+    workshopGallery,
+    processSteps: servicesPage.processSteps || [],
+    seo: servicesPage.seo
   }
 }

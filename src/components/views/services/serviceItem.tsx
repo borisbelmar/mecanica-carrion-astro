@@ -8,6 +8,7 @@ interface ServiceItemProps {
   description: string
   bgImage: string
   index: number
+  slug?: string
 }
 
 const processSteps = [
@@ -19,7 +20,9 @@ const processSteps = [
   { step: "06", title: "Entrega", description: "Tu moto lista" }
 ]
 
-export default function ServiceItem({ icon, title, description, bgImage }: ServiceItemProps) {
+export default function ServiceItem({ icon, title, description, bgImage, slug }: ServiceItemProps) {
+  const serviceSlug = slug || title.toLowerCase()
+  
   const getWhatsAppMessage = () => {
     return `Hola! Me interesa el servicio de ${title.toLowerCase()}. ¿Podrían ayudarme con más información para agendar una cita?`
   }
@@ -34,15 +37,15 @@ export default function ServiceItem({ icon, title, description, bgImage }: Servi
     // URLs para cada tipo de servicio
     const serviceUrls = {
       'mantenimiento': '/proyectos?categoria=mantenimiento',
-      'restauración': '/proyectos?categoria=restauracion', 
+      'restauracion': '/proyectos?categoria=restauracion', 
       'modificaciones': '/proyectos?categoria=modificaciones'
     }
-    return serviceUrls[title.toLowerCase() as keyof typeof serviceUrls] || '/proyectos'
+    return serviceUrls[serviceSlug as keyof typeof serviceUrls] || '/proyectos'
   }
 
   return (
     <section 
-      id={title.toLowerCase()}
+      id={serviceSlug}
       className="relative min-h-screen w-full overflow-hidden flex items-center justify-center"
     >
       <div
@@ -67,37 +70,6 @@ export default function ServiceItem({ icon, title, description, bgImage }: Servi
           <p className="text-lg lg:text-xl text-gray-300 leading-relaxed max-w-4xl mx-auto font-light">
             {description}
           </p>
-        </div>
-        
-        <div className="mt-16">
-          <h3 className="text-2xl text-yellow-400 mb-12 font-light tracking-widest uppercase">
-            Nuestro Proceso
-          </h3>
-          
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8">
-            {processSteps.map((step, stepIndex) => (
-              <div key={stepIndex} className="group">
-                <div className="relative">
-                  <div className="w-20 h-20 mx-auto mb-4 rounded-full border border-yellow-400/30 bg-black/20 backdrop-blur-sm flex items-center justify-center group-hover:border-yellow-400 transition-all duration-300">
-                    <span className="text-yellow-400 font-mono text-lg">
-                      {step.step}
-                    </span>
-                  </div>
-                  
-                  {stepIndex < processSteps.length - 1 && (
-                    <div className="hidden lg:block absolute top-10 left-full w-full h-px bg-gradient-to-r from-yellow-400/50 to-transparent"></div>
-                  )}
-                </div>
-                
-                <h4 className="text-white font-medium mb-2">
-                  {step.title}
-                </h4>
-                <p className="text-gray-400 text-sm">
-                  {step.description}
-                </p>
-              </div>
-            ))}
-          </div>
         </div>
 
         <div className="mt-12 mb-8 flex flex-col sm:flex-row gap-4 justify-center items-center">
