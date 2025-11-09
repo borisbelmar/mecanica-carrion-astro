@@ -192,6 +192,65 @@ export type ServicesPageData = {
   }
 }
 
+export type HomePageHero = {
+  video: string
+  mainTitle: string
+  subtitle: string
+  buttonText: string
+  buttonUrl: string
+}
+
+export type HomePageWhySection = {
+  title: string
+  paragraphs: string[]
+  image: string
+}
+
+export type HomePageService = {
+  icon: string
+  title: string
+  description: string
+}
+
+export type HomePageServicesSection = {
+  title: string
+  description: string
+  backgroundImage: string
+  services: HomePageService[]
+}
+
+export type HomePageProcessStep = {
+  icon: string
+  title: string
+  description: string
+}
+
+export type HomePageProcessSection = {
+  title: string
+  description: string
+  steps: HomePageProcessStep[]
+}
+
+export type HomePageWorkshopSection = {
+  title: string
+  paragraphs: string[]
+  buttonText: string
+  buttonUrl: string
+  images: string[]
+}
+
+export type HomePageData = {
+  hero: HomePageHero
+  whySection: HomePageWhySection
+  servicesSection: HomePageServicesSection
+  processSection: HomePageProcessSection
+  workshopSection: HomePageWorkshopSection
+  seo?: {
+    metaTitle?: string
+    metaDescription?: string
+  }
+}
+
 export async function fetchHistory(): Promise<HistoryBlock[]> {
   const history = await client.fetch('*[_type == "historyBlock"]{decade, order, title, subtitle, description, image} | order(order asc)')
   history.forEach((block: any) => {
@@ -328,7 +387,7 @@ export async function fetchServicesPage(): Promise<ServicesPageData> {
   if (!servicesPage) {
     throw new Error('Services page data not found in Sanity')
   }
-  
+
   // Transform services with safe image URLs
   const services = servicesPage.services ? servicesPage.services.map((service: any) => ({
     ...service,
@@ -353,5 +412,146 @@ export async function fetchServicesPage(): Promise<ServicesPageData> {
     workshopGallery,
     processSteps: servicesPage.processSteps || [],
     seo: servicesPage.seo
+  }
+}
+
+export async function fetchHomePage(): Promise<HomePageData> {
+  const homePage = await client.fetch(`*[_type == "homePage"][0]{
+    hero{
+      video{
+        _type,
+        asset->{
+          _id,
+          url
+        }
+      },
+      mainTitle,
+      subtitle,
+      buttonText,
+      buttonUrl
+    },
+    whySection{
+      title,
+      paragraphs,
+      image{
+        _type,
+        asset->{
+          _id,
+          url
+        },
+        hotspot,
+        crop,
+        alt
+      }
+    },
+    servicesSection{
+      title,
+      description,
+      backgroundImage{
+        _type,
+        asset->{
+          _id,
+          url
+        },
+        hotspot,
+        crop,
+        alt
+      },
+      services[]{
+        icon,
+        title,
+        description
+      }
+    },
+    processSection{
+      title,
+      description,
+      steps[]{
+        icon,
+        title,
+        description
+      }
+    },
+    workshopSection{
+      title,
+      paragraphs,
+      buttonText,
+      buttonUrl,
+      images[]{
+        _type,
+        asset->{
+          _id,
+          url
+        },
+        hotspot,
+        crop,
+        alt
+      }
+    },
+    seo{
+      metaTitle,
+      metaDescription
+    }
+  }`)
+
+  if (!homePage) {
+    throw new Error('Home page data not found in Sanity')
+  }
+
+  // Helper function to get file URL (for video)
+  const getFileUrl = (fileRef: any): string => {
+    if (!fileRef || !fileRef.asset) return ''
+    return fileRef.asset.url || ''
+  }
+
+  return {
+    hero: {
+      video: getFileUrl(homePage.hero?.video) || '/videos/home-video.mp4',
+      mainTitle: homePage.hero?.mainTitle || 'Pasión que ruge. \n Mecánica con historia.',
+      subtitle: homePage.hero?.subtitle || 'Desde hace tres generaciones.',
+      buttonText: homePage.hero?.buttonText || 'Ver nuestros proyectos',
+      buttonUrl: homePage.hero?.buttonUrl || '/proyectos'
+    },
+    whySection: {
+      title: homePage.whySection?.title || 'No somos solo un taller.',
+      paragraphs: homePage.whySection?.paragraphs || [
+        'Somos una familia que lleva tres generaciones viviendo la mecánica como forma de vida. Aquí, cada moto que entra es tratada como si fuera nuestra.',
+        'Porque no reparamos por rutina. Lo hacemos por pasión. Porque entendemos lo que significa esa moto para ti: libertad, carácter y una historia que continúa.'
+      ],
+      image: safeImageUrl(homePage.whySection?.image) || '/images/reason-why.png'
+    },
+    servicesSection: {
+      title: homePage.servicesSection?.title || 'Nuestros Servicios',
+      description: homePage.servicesSection?.description || 'En Mecánica Carrión, ofrecemos un servicio integral para tu moto, desde el mantenimiento preventivo hasta modificaciones personalizadas.',
+      backgroundImage: safeImageUrl(homePage.servicesSection?.backgroundImage) || '/images/services.webp',
+      services: homePage.servicesSection?.services || [
+        { icon: 'gauge', title: 'Mantenimiento', description: 'Deja tu moto al día con diagnósticos precisos y cuidado profesional.' },
+        { icon: 'sparkles', title: 'Restauración', description: 'Rescatamos la esencia original y devolvemos la gloria a tu moto.' },
+        { icon: 'wrench', title: 'Modificaciones', description: 'Creamos motos únicas que reflejan tu personalidad y estilo.' }
+      ]
+    },
+    processSection: {
+      title: homePage.processSection?.title || 'Nuestro Proceso',
+      description: homePage.processSection?.description || 'En Mecánica Carrión, seguimos un proceso claro y transparente para garantizar la satisfacción de nuestros clientes.',
+      steps: homePage.processSection?.steps || [
+        { icon: 'clipboardList', title: 'Diagnóstico', description: 'Revisamos tu moto contigo y evaluamos el trabajo necesario.' },
+        { icon: 'fileText', title: 'Presupuesto', description: 'Te entregamos una propuesta clara, justa y sin sorpresas.' },
+        { icon: 'hammer', title: 'Trabajo en marcha', description: 'Comenzamos a trabajar y te mantenemos informado del progreso.' },
+        { icon: 'checkCircle2', title: 'Entrega', description: 'Recibes tu moto lista para rugir otra vez. Garantía incluida.' }
+      ]
+    },
+    workshopSection: {
+      title: homePage.workshopSection?.title || 'Nuestro Taller',
+      paragraphs: homePage.workshopSection?.paragraphs || [
+        'Aquí es donde todo sucede. Un taller lleno de herramientas, historia, grasa, y muchas motos que han pasado por nuestras manos.',
+        'Es un espacio que respira mecánica, donde el pasado y el futuro se cruzan. Ven a conocerlo, y a vivir la experiencia Carrión.'
+      ],
+      buttonText: homePage.workshopSection?.buttonText || 'Conocer más',
+      buttonUrl: homePage.workshopSection?.buttonUrl || '/quienes-somos',
+      images: homePage.workshopSection?.images ? 
+        homePage.workshopSection.images.map((img: any) => safeImageUrl(img)).filter(Boolean) : 
+        ['/images/taller-1.webp', '/images/taller-2.webp', '/images/taller-3.webp']
+    },
+    seo: homePage.seo
   }
 }
