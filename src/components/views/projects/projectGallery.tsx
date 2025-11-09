@@ -128,8 +128,8 @@ export function ProjectGallery({ projects }: ProjectGalleryProps) {
         </div>
 
         {filteredProjects.length > 0 ? (
-          <div className="columns-1 sm:columns-2 lg:columns-3 xl:columns-4 gap-4 sm:gap-6">
-            <AnimatePresence mode="wait">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
+            <AnimatePresence>
               {filteredProjects.map((project, index) => (
                 <motion.div
                   key={`${activeFilter}-${project._id}`}
@@ -141,14 +141,14 @@ export function ProjectGallery({ projects }: ProjectGalleryProps) {
                     delay: index * 0.05,
                     ease: [0.25, 0.25, 0, 1]
                   }}
-                  className="break-inside-avoid mb-4 sm:mb-6 overflow-hidden rounded-lg bg-neutral-900/60 border border-neutral-700/50 backdrop-blur transition-all duration-300 group hover:border-yellow-400/50 hover:shadow-lg hover:shadow-yellow-400/10"
+                  className="overflow-hidden rounded-lg bg-neutral-900/60 border border-neutral-700/50 backdrop-blur transition-all duration-300 group hover:border-yellow-400/50 hover:shadow-lg hover:shadow-yellow-400/10"
                 >
                   <a href={`/proyectos/${project.slug.current}`} className="block">
                     <div className="relative overflow-hidden">
                       <img
                         src={project.image || defaultImage}
                         alt={project.model}
-                        className="w-full h-auto object-cover transition-transform duration-500 group-hover:scale-110"
+                        className="w-full h-auto object-cover transition-transform duration-500 group-hover:scale-110 aspect-video"
                         onError={(e) => {
                           // Si falla cargar la imagen, usar imagen por defecto
                           const target = e.target as HTMLImageElement
