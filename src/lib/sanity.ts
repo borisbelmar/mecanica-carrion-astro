@@ -185,7 +185,6 @@ export type ServicesPageData = {
   heroSubtitle: string
   services: Service[]
   workshopGallery: WorkshopGallery
-  processSteps: ProcessStep[]
   seo?: {
     metaTitle?: string
     metaDescription?: string
@@ -373,11 +372,6 @@ export async function fetchServicesPage(): Promise<ServicesPageData> {
         alt
       }
     },
-    processSteps[]{
-      step,
-      title,
-      description
-    },
     seo{
       metaTitle,
       metaDescription
@@ -410,7 +404,6 @@ export async function fetchServicesPage(): Promise<ServicesPageData> {
     heroSubtitle: servicesPage.heroSubtitle || 'Más de 20 años perfeccionando el arte de la mecánica',
     services,
     workshopGallery,
-    processSteps: servicesPage.processSteps || [],
     seo: servicesPage.seo
   }
 }

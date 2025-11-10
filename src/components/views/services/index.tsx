@@ -3,7 +3,6 @@ import { Gauge, Sparkles, Wrench } from "lucide-react"
 import ServiceItem from "./serviceItem"
 import Gallery from "@/components/gallery"
 import type { ServicesPageData } from "@/lib/sanity"
-import ServiceProcess from "./process"
 
 interface ServicesViewProps {
   servicesData: ServicesPageData
@@ -78,10 +77,6 @@ export default function ServicesView({ servicesData }: ServicesViewProps) {
           </div>
         </div>
       </section>
-      <ServiceProcess
-        processSteps={servicesData.processSteps}
-        className="py-16 px-8"
-      />
       {services.map((service, index) => {
         const iconKey = service.icon as keyof typeof iconMap
         const serviceIcon = iconMap[iconKey] || iconMap.wrench

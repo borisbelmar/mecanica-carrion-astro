@@ -11,15 +11,6 @@ interface ServiceItemProps {
   slug?: string
 }
 
-const processSteps = [
-  { step: "01", title: "Visita", description: "Agenda tu cita" },
-  { step: "02", title: "Cotización", description: "Evaluamos tu moto" },
-  { step: "03", title: "Foto Inicial", description: "Registro del estado" },
-  { step: "04", title: "Proceso", description: "Trabajo especializado" },
-  { step: "05", title: "Foto Final", description: "Resultado obtenido" },
-  { step: "06", title: "Entrega", description: "Tu moto lista" }
-]
-
 export default function ServiceItem({ icon, title, description, bgImage, slug }: ServiceItemProps) {
   const serviceSlug = slug || title.toLowerCase()
   
